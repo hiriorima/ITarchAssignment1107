@@ -81,6 +81,15 @@ public class RssParserTask extends AsyncTask<String, Integer, RssListAdapter> {
 
                                 String parserDescr = parser.nextText();
 
+                                String regex = "<p>";
+                                String regex2 = "</p>";
+                                Pattern p = Pattern.compile(regex);
+                                Pattern p2 = Pattern.compile(regex2);
+                                Matcher m = p.matcher(parserDescr);
+                                parserDescr = m.replaceFirst("");
+                                Matcher m2 = p2.matcher(parserDescr);
+                                parserDescr = m2.replaceFirst("");
+
                                 currentItem.setDescription(parserDescr);
                             }
                         }
