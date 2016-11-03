@@ -1,45 +1,39 @@
 package com.example.itarch.itarchassignment;
 
-import android.support.v7.app.AppCompatActivity;
+/**
+ * Created by b1013043 on 2016/11/03.
+ */
+
 import android.os.Bundle;
-
-import java.util.Locale;
-import java.util.Queue;
-
 import android.app.Activity;
-import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.content.Intent;
 
-public class MainActivity extends Activity
-        implements View.OnClickListener, TextToSpeech.OnInitListener {
-    final private Float SPEECH_SLOW = 0.5f;
-    final private Float SPEECH_NORMAL = 1.0f;
-    final private Float SPEECH_FAST = 1.5f;
-    final private Float PITCH_LOW = 0.5f;
-    final private Float PITCH_NORMAL = 1.0f;
-    final private Float PITCH_HIGH = 1.5f;
+import java.util.Locale;
+
+public class ItemDetailActivity extends Activity implements TextToSpeech.OnInitListener {
+    private TextView mTitle;
+    private TextView mDescr;
     private TextToSpeech    tts;
-    private Button buttonSpeech;
-    private Button buttonSlow;
-    private Button buttonNormal;
-    private Button buttonFast;
-    private Button buttonLowPitch;
-    private Button buttonNormalPitch;
-    private Button buttonHighPitch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.item_detail);
 
-        // ボタンのClickListenerの登録
-        buttonSpeech = (Button)findViewById(R.id.ButtonSpeech);
-        buttonSpeech.setOnClickListener(this);
+        Intent intent = getIntent();
 
+        String title = intent.getStringExtra("TITLE");
+        mTitle = (TextView) findViewById(R.id.item_detail_title);
+        mTitle.setText(title);
+        String descr = intent.getStringExtra("DESCRIPTION");
+        mDescr = (TextView) findViewById(R.id.item_detail_descr);
+        mDescr.setText(descr);
 
         // TextToSpeechオブジェクトの生成
         tts = new TextToSpeech(this, this);
@@ -66,10 +60,12 @@ public class MainActivity extends Activity
         } else {
             Log.d("", "Error Init");
         }
+
+        speechText();
     }
 
     private void speechText() {
-        String string = ((EditText)findViewById(R.id.EditTextSpeech)).getText().toString();
+        String string = mDescr.getText().toString();
         if (0 < string.length()) {
             if (tts.isSpeaking()) {
                 // 読み上げ中なら止める
@@ -78,13 +74,6 @@ public class MainActivity extends Activity
 
             // 読み上げ開始
             tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (buttonSpeech == v) {
-            speechText();
         }
     }
 }
