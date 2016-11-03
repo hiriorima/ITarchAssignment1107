@@ -4,10 +4,15 @@ package com.example.itarch.itarchassignment;
  * Created by b1013043 on 2016/11/03.
  */
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +26,25 @@ public class RssReader extends ListActivity {
     private RssListAdapter mAdapter;
     private ArrayList<Item> mItems;
 
+    private IServiceMethod mService;
+
+    private ServiceConnection mServiceConnection =
+            new ServiceConnection() { //【2】
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+
+                    mService = null;
+                }
+
+                @Override
+                public void onServiceConnected(
+                        ComponentName name, IBinder service) { //【3】
+                    mService = IServiceMethod.Stub.asInterface(service); //【4】
+
+                }
+            };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +57,11 @@ public class RssReader extends ListActivity {
         // タスクを起動する
         RssParserTask task = new RssParserTask(this, mAdapter);
         task.execute(RSS_FEED_URL);
+
+        Intent tempIntent = new Intent(IServiceMethod.class.getName());
+        tempIntent.setPackage("com.example.itarch.itarchassignment");
+        bindService(tempIntent, //【5】
+                mServiceConnection, BIND_AUTO_CREATE); //【6】
     }
 
     // リストの項目を選択した時の処理

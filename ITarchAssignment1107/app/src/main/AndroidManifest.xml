@@ -13,9 +13,23 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+
         </intent-filter>
     </activity>
-    <activity android:name=".ItemDetailActivity" />
+    <activity android:name=".ItemDetailActivity">
+
+    </activity>
+
+        <service
+            android:name=".MyService"
+            android:process=":reading" >
+            <intent-filter>
+                <action android:name="com.example.itarch.itarchassignment.IServiceMethod" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </service>
+
     </application>
+
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

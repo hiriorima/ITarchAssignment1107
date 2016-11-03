@@ -4,6 +4,7 @@ package com.example.itarch.itarchassignment;
  * Created by b1013043 on 2016/11/03.
  */
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Context;
@@ -11,13 +12,13 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.view.LayoutInflater;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RssListAdapter extends ArrayAdapter<Item> {
     private LayoutInflater mInflater;
     private TextView mTitle;
     private TextView mDescr;
+
+
 
     public RssListAdapter(Context context, List<Item> objects) {
         super(context, 0, objects);
@@ -37,13 +38,15 @@ public class RssListAdapter extends ArrayAdapter<Item> {
         Item item = this.getItem(position);
         if (item != null) {
             // Itemから必要なデータを取り出し、それぞれTextViewにセットする
-            String title = item.getTitle().toString();
-            mTitle = (TextView) view.findViewById(R.id.item_title);
-            mTitle.setText(title);
-            String descr = item.getDescription().toString();
-            mDescr = (TextView) view.findViewById(R.id.item_descr);
-            mDescr.setText(descr);
-        }
+                Log.d("descr",item.getDescription().toString());
+                String title = item.getTitle().toString();
+                mTitle = (TextView) view.findViewById(R.id.item_title);
+                mTitle.setText(title);
+                String descr = item.getDescription().toString();
+                mDescr = (TextView) view.findViewById(R.id.item_descr);
+                mDescr.setText(descr);
+            }
+
         return view;
-    }
+        }
 }
